@@ -1,1 +1,7 @@
 # Wordle
+
+### Client
+
+- React
+
+### Server
