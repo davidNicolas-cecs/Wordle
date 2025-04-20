@@ -1,10 +1,9 @@
 import { Router } from "express";
+import * as wordleController from "../controller/wordleController";
 
 const wordleRoutes = Router();
 
-// Define your routes here
-wordleRoutes.get("/", (req, res) => {
-  res.send("Wordle API is working!");
-});
+wordleRoutes.get("/getRandomWord", wordleController.getRandomWord);
+wordleRoutes.get("/checkIfValidWord/:word", wordleController.checkIfValidWord);
 
 export default wordleRoutes;

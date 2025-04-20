@@ -1,16 +1,13 @@
-import express from "express";
-
-import MessageResponse from "../interfaces/MessageResponse";
-import emojis from "./emojis";
-
-const router = express.Router();
-
-router.get<{}, MessageResponse>("/", (req, res) => {
-  res.json({
-    message: "API - 👋🌎🌍🌏",
-  });
+import axios from "axios";
+import dotenv from "dotenv";
+dotenv.config();
+const apiClient = axios.create({
+  baseURL: process.env.BASE_URL,
+  headers: {
+    "Content-Type": "application/json",
+    "x-rapidapi-host": process.env.X_RAPIDAPI_HOST,
+    "x-rapidapi-key": process.env.X_RAPIDAPI_KEY,
+  },
 });
 
-router.use("/emojis", emojis);
-
-export default router;
+export default apiClient;
