@@ -13,15 +13,15 @@ function KeyTile({ char, handleKeyPress, status }: KeyTileProps) {
       : status === "present"
       ? "bg-yellow-500"
       : status === "absent"
-      ? "bg-gray-800"
+      ? "bg-gray-500 dark:bg-gray-800"
       : "";
   return (
     <button
       disabled
-      className={`bg-gray-100 dark:bg-gray-700 w-[40px] h-[60px] min-w-fit rounded-xs mt-2 p-2 ${bgColor}`}
+      className={`bg-gray-400 dark:bg-gray-700 w-[40px] h-[60px] min-w-fit rounded-xs mt-2 p-2 ${bgColor}`}
       onClick={() => handleKeyPress(char)}
     >
-      <p className="font-black">
+      <p className="text-black dark:text-white font-black">
         {char === "Backspace" ? <Delete size={30} /> : char}
       </p>
     </button>
