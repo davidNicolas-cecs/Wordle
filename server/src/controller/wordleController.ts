@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import { wordleClient } from "../api/WordleClient";
 import { Wordle } from "../model/Wordle";
+
+// TESTED
 export const getRandomWord = async (req: Request, res: Response) => {
   try {
     const word = await wordleClient.getRandomWord();
@@ -19,6 +21,7 @@ export const getRandomWord = async (req: Request, res: Response) => {
   }
 };
 
+// TESTED
 export const checkIfValidWord = async (req: Request, res: Response) => {
   try {
     console.log("Checking word:", req.params.word);
