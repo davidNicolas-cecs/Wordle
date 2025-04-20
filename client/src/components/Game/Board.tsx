@@ -10,7 +10,6 @@ interface BoardProps {
 }
 
 function Board({ guesses, guess, currentTry }: BoardProps) {
-  //console.log("guesses", guesses);
   return (
     <div className="flex flex-col gap-2">
       {guesses.map((row, rowIndex) => (

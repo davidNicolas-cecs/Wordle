@@ -18,7 +18,6 @@ function Keyboard({ onKeyInput, pressedKeys }: KeyboardProps) {
   };
 
   useEffect(() => {
-    console.log("pressedKeys", pressedKeys);
     const listener = (event: KeyboardEvent) => {
       if (event.ctrlKey && event.key.toLowerCase() === "r") {
         event.preventDefault();
@@ -26,7 +25,6 @@ function Keyboard({ onKeyInput, pressedKeys }: KeyboardProps) {
         return;
       }
       if (allKeys.includes(event.key.toLowerCase())) {
-        console.log("valid key press");
         onKeyInput(event.key.toUpperCase());
       }
     };

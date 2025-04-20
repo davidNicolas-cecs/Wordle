@@ -7,10 +7,9 @@ interface KeyTileProps {
   status?: "correct" | "present" | "absent" | "";
 }
 function KeyTile({ char, handleKeyPress, status }: KeyTileProps) {
-  console.log("KeyTile", char, status);
   const bgColor =
     status === "correct"
-      ? "bg-green-200"
+      ? "bg-green-500"
       : status === "present"
       ? "bg-yellow-500"
       : status === "absent"

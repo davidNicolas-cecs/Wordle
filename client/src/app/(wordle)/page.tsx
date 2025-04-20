@@ -1,15 +1,27 @@
 "use client";
+import { wordleClient } from "@/api/WordleClient";
 import Board from "@/components/Game/Board";
 import Keyboard from "@/components/Game/Keyboard";
 import GameLost from "@/components/Popups/GameLost";
+import GameStart from "@/components/Popups/GameStart";
 import GameWon from "@/components/Popups/GameWon";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 export interface guessType {
   letter: string;
   status: "correct" | "present" | "absent" | "";
 }
 function Page() {
+  const [showStartPopup, setShowStartPopup] = useState(true);
+  const [correctWord, setCorrectWord] = useState("");
+  const startGame = async () => {
+    const response = await wordleClient.getWordle();
+    if (response) {
+      setCorrectWord(response.toUpperCase());
+      console.log("Game started with:", response);
+      setShowStartPopup(false);
+    }
+  };
   const [currGuess, setCurrGuess] = useState<string[]>([]);
   const [guesses, setGuesses] = useState<guessType[][]>(
     Array.from({ length: 6 }, () =>
@@ -23,7 +35,7 @@ function Page() {
   const [pressedKeys, setPressedKeys] = useState<
     Record<string, "correct" | "present" | "absent">
   >({});
-  const [correctWord, setCorrectWord] = useState("APPLE"); // Placeholder for the correct word
+
   const handleKeyInput = (key: string) => {
     const keyStatusMap: Record<string, "correct" | "present" | "absent"> = {};
 
@@ -75,7 +87,6 @@ function Page() {
         if (
           newGuesses[currentTry].map((g) => g.letter).join("") === correctWord
         ) {
-          console.log("You won!");
           setGameWon(true);
         } else if (currentTry === 5) {
           setGameLost(true);
@@ -88,21 +99,27 @@ function Page() {
   };
 
   const handleNewGame = () => {
+    startGame();
     setCurrGuess([]);
     setGuesses(
       Array.from({ length: 6 }, () =>
         Array.from({ length: 5 }, () => ({ letter: "", status: "" }))
       )
     );
+    setPressedKeys({});
+
     setGameWon(false);
     setGameLost(false);
     setCurrentTry(0);
-    setCorrectWord("APPLE"); // Reset to a new word
-    console.log("New game started!from page.tsx");
+  };
+
+  const handleStartNewGame = () => {
+    startGame();
   };
 
   return (
     <main className="flex flex-col mt-4 items-center justify-items-center min-h-screen">
+      {showStartPopup && <GameStart handleClick={handleStartNewGame} />}
       {gameWon && <GameWon handleClick={handleNewGame} stats={currentTry} />}
       {gameLost && <GameLost handleClick={handleNewGame} stats={currentTry} />}
       <Board guesses={guesses} guess={currGuess} currentTry={currentTry} />
