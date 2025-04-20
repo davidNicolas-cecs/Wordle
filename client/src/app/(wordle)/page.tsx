@@ -5,27 +5,52 @@ import GameLost from "@/components/Popups/GameLost";
 import GameWon from "@/components/Popups/GameWon";
 import React, { useState } from "react";
 
+export interface guessType {
+  letter: string;
+  status: "correct" | "present" | "absent" | "";
+}
 function Page() {
-  const [guess, setGuess] = useState<string[]>([]);
-  const [guesses, setGuesses] = useState<string[][]>(
-    Array.from({ length: 6 }, () => Array(5).fill(""))
+  const [currGuess, setCurrGuess] = useState<string[]>([]);
+  const [guesses, setGuesses] = useState<guessType[][]>(
+    Array.from({ length: 6 }, () =>
+      Array.from({ length: 5 }, () => ({ letter: "", status: "" }))
+    )
   );
   const [gameWon, setGameWon] = useState(false);
   const [gameLost, setGameLost] = useState(false);
   const isGameOver = gameWon || gameLost;
   const [currentTry, setCurrentTry] = useState(0);
+
   const [correctWord, setCorrectWord] = useState("APPLE"); // Placeholder for the correct word
   const handleKeyInput = (key: string) => {
     if (key === "BACKSPACE" || key === "DELETE") {
-      setGuess((prev) => prev.slice(0, -1));
+      setCurrGuess((prev) => prev.slice(0, -1));
     } else if (key === "ENTER") {
-      if (guess.length === 5) {
+      if (currGuess.length === 5) {
+        // send reqyest to validate word
         const newGuesses = [...guesses];
-        newGuesses[currentTry] = [...guess];
-        setGuesses(newGuesses);
-        setGuess([]);
-        setCurrentTry((prev) => prev + 1);
 
+        for (let i = 0; i < 5; i++) {
+          if (currGuess[i] === correctWord[i]) {
+            newGuesses[currentTry][i] = {
+              letter: currGuess[i],
+              status: "correct",
+            };
+          } else if (correctWord.includes(currGuess[i])) {
+            newGuesses[currentTry][i] = {
+              letter: currGuess[i],
+              status: "present",
+            };
+          } else {
+            newGuesses[currentTry][i] = {
+              letter: currGuess[i],
+              status: "absent",
+            };
+          }
+        }
+        setGuesses(newGuesses);
+        setCurrGuess([]);
+        setCurrentTry((prev) => prev + 1);
         // if word is correct
         if (newGuesses[currentTry].join("") === correctWord) {
           setGameWon(true);
@@ -35,13 +60,13 @@ function Page() {
           return;
         }
       }
-    } else if (guess.length < 5) {
-      setGuess((prev) => [...prev, key]);
+    } else if (currGuess.length < 5) {
+      setCurrGuess((prev) => [...prev, key]);
     }
   };
 
   const handleNewGame = () => {
-    setGuess([]);
+    setCurrGuess([]);
     setGuesses(Array.from({ length: 6 }, () => Array(5).fill("")));
     setGameWon(false);
     setGameLost(false);
@@ -54,7 +79,7 @@ function Page() {
     <main className="flex flex-col mt-4 items-center justify-items-center min-h-screen">
       {gameWon && <GameWon handleClick={handleNewGame} stats={currentTry} />}
       {gameLost && <GameLost handleClick={handleNewGame} stats={currentTry} />}
-      <Board guesses={guesses} guess={guess} currentTry={currentTry} />
+      <Board guesses={guesses} guess={currGuess} currentTry={currentTry} />
       <Keyboard onKeyInput={handleKeyInput} />
     </main>
   );
