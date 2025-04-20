@@ -4,8 +4,9 @@ import KeyTile from "./KeyTile";
 
 interface KeyboardProps {
   onKeyInput: (key: string) => void;
+  pressedKeys?: Record<string, string>;
 }
-function Keyboard({ onKeyInput }: KeyboardProps) {
+function Keyboard({ onKeyInput, pressedKeys }: KeyboardProps) {
   const keyrow1 = ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"];
   const keyrow2 = ["A", "S", "D", "F", "G", "H", "J", "K", "L"];
   const keyrow3 = ["Enter", "Z", "X", "C", "V", "B", "N", "M", "Backspace"];
@@ -17,13 +18,13 @@ function Keyboard({ onKeyInput }: KeyboardProps) {
   };
 
   useEffect(() => {
+    console.log("pressedKeys", pressedKeys);
     const listener = (event: KeyboardEvent) => {
       if (event.ctrlKey && event.key.toLowerCase() === "r") {
         event.preventDefault();
         window.location.reload();
         return;
       }
-
       if (allKeys.includes(event.key.toLowerCase())) {
         console.log("valid key press");
         onKeyInput(event.key.toUpperCase());
@@ -40,7 +41,14 @@ function Keyboard({ onKeyInput }: KeyboardProps) {
           {[keyrow1, keyrow2, keyrow3].map((row, i) => (
             <div key={i} className="flex flex-row gap-2">
               {row.map((key) => (
-                <KeyTile key={key} char={key} handleKeyPress={handleKeyPress} />
+                <KeyTile
+                  key={key}
+                  char={key}
+                  handleKeyPress={handleKeyPress}
+                  status={
+                    pressedKeys?.[key] as "correct" | "present" | "absent" | ""
+                  }
+                />
               ))}
             </div>
           ))}
