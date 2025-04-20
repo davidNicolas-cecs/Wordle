@@ -48,17 +48,20 @@ function Page() {
             };
           }
         }
-        setGuesses(newGuesses);
-        setCurrGuess([]);
-        setCurrentTry((prev) => prev + 1);
+
         // if word is correct
-        if (newGuesses[currentTry].join("") === correctWord) {
+        if (
+          newGuesses[currentTry].map((g) => g.letter).join("") === correctWord
+        ) {
+          console.log("You won!");
           setGameWon(true);
-          return;
         } else if (currentTry === 5) {
           setGameLost(true);
           return;
         }
+        setGuesses(newGuesses);
+        setCurrGuess([]);
+        setCurrentTry((prev) => prev + 1);
       }
     } else if (currGuess.length < 5) {
       setCurrGuess((prev) => [...prev, key]);
