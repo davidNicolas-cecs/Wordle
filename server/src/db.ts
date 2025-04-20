@@ -17,4 +17,4 @@ client
     console.error("Database connection error:", err);
   });
 
-module.exports = { connect: () => client };
+export default client;

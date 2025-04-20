@@ -1,12 +1,13 @@
 import { Request, Response } from "express";
 import { wordleClient } from "../api/WordleClient";
-
+import { Wordle } from "../model/Wordle";
 export const getRandomWord = async (req: Request, res: Response) => {
   try {
     const word = await wordleClient.getRandomWord();
     console.log("Random word fetched:", word);
+    // call to model to add to db
+    await Wordle.addWord(word);
     res.status(200).json({
-      message: "Random word fetched successfully",
       word: word,
     });
   } catch (error) {
@@ -24,7 +25,6 @@ export const checkIfValidWord = async (req: Request, res: Response) => {
     const word = req.params.word.toLowerCase();
     const isWord = await wordleClient.checkIfValidWord(word);
     res.status(200).json({
-      message: "Word check successful",
       isWord: isWord,
     });
   } catch (error) {
