@@ -20,6 +20,14 @@ export const wordleClient = {
       const res = await apiClient.get<WordResponse>(`/${word}`);
       return res.data.word === word;
     } catch (err) {
+      if (
+        err instanceof Error &&
+        (err as any).response &&
+        (err as any).response.status === 404
+      ) {
+        // If 404, return false
+        return false;
+      }
       console.error("Error checking if valid word:", err);
       throw err;
     }
