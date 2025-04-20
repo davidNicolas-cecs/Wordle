@@ -22,6 +22,16 @@ function Page() {
       setShowStartPopup(false);
     }
   };
+
+  const validateWord = async (word: string) => {
+    try {
+      const response = await wordleClient.validateWord(word);
+      return response;
+    } catch (error) {
+      console.error("Error validating word:", error);
+      return false;
+    }
+  };
   const [currGuess, setCurrGuess] = useState<string[]>([]);
   const [guesses, setGuesses] = useState<guessType[][]>(
     Array.from({ length: 6 }, () =>
@@ -36,7 +46,7 @@ function Page() {
     Record<string, "correct" | "present" | "absent">
   >({});
 
-  const handleKeyInput = (key: string) => {
+  const handleKeyInput = async (key: string) => {
     const keyStatusMap: Record<string, "correct" | "present" | "absent"> = {};
 
     if (key === "BACKSPACE" || key === "DELETE") {
@@ -44,6 +54,11 @@ function Page() {
     } else if (key === "ENTER") {
       if (currGuess.length === 5) {
         // send reqyest to validate word
+        const isValid = await validateWord(currGuess.join("").toLowerCase());
+        if (isValid == false) {
+          alert("Invalid word!");
+          return;
+        }
         const newGuesses = [...guesses];
         for (let i = 0; i < 5; i++) {
           if (currGuess[i] === correctWord[i]) {

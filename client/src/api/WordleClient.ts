@@ -14,4 +14,17 @@ export const wordleClient = {
       throw err;
     }
   },
+
+  validateWord: async (word: string): Promise<boolean> => {
+    try {
+      const res = await apiClient.get<{ isWord: boolean }>(
+        `/api/wordle/checkIfValidWord/${word}`
+      );
+      console.log("Word validation response:", res.data.isWord);
+      return res.data.isWord;
+    } catch (err) {
+      console.error("Error validating word:", err);
+      throw err;
+    }
+  },
 };
