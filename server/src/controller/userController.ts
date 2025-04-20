@@ -21,16 +21,3 @@ export const addUser = async (req: Request, res: Response) => {
     });
   }
 };
-
-export const getUserFavorites = async (req: Request, res: Response) => {
-  try {
-    const rows = await User.getUserFavorites(req.body.userId);
-    res.status(200).json(rows);
-  } catch (error) {
-    console.error("Error fetching user favorites:", error);
-    res.status(500).json({
-      message: "Failed to fetch user favorites",
-      error: error instanceof Error ? error.message : "Unknown error",
-    });
-  }
-};

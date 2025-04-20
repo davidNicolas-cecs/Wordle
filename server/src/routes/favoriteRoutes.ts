@@ -1,7 +1,7 @@
 import { Router } from "express";
-import * as UserController from "../controller/userController";
+import * as userController from "../controller/userController";
 
 const favoriteRoutes = Router();
-favoriteRoutes.get("/getUserFavorites", UserController.getUserFavorites);
 
+//favoriteRoutes.post("/getAllFavorites", userController.get);
 export default favoriteRoutes;
