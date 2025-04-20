@@ -8,7 +8,10 @@ interface ButtonProps {
 
 function Button({ children, onClick }: ButtonProps): JSX.Element {
   return (
-    <button onClick={onClick} className=" border p-2 bg-green-900">
+    <button
+      onClick={onClick}
+      className=" border p-2 bg-green-900 cursor-pointer"
+    >
       {children}
     </button>
   );

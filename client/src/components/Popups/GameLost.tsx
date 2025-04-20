@@ -5,22 +5,23 @@ import { HeartPlus } from "lucide-react";
 
 interface GameWonProps {
   handleClick: () => void;
-  stats: number;
+  word: string;
 }
-function GameWon({ handleClick, stats }: GameWonProps) {
+function GameLost({ handleClick, word }: GameWonProps) {
   return (
     <Popup>
       <div className="flex flex-col items-center justify-center h-full w-full gap-4">
         <h1 className="font-bold text-2xl">Nice Try!</h1>
+        <p>The word was: {word}</p>
 
         <Button onClick={handleClick}> Start New Game </Button>
-        <span className="flex flex-row gap-2">
+        <button className="flex flex-row gap-2 cursor-pointer">
           Save
           <HeartPlus />
-        </span>
+        </button>
       </div>
     </Popup>
   );
 }
 
-export default GameWon;
+export default GameLost;

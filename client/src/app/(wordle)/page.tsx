@@ -5,6 +5,7 @@ import Keyboard from "@/components/Game/Keyboard";
 import GameLost from "@/components/Popups/GameLost";
 import GameStart from "@/components/Popups/GameStart";
 import GameWon from "@/components/Popups/GameWon";
+import LoadingState from "@/components/Popups/LoadingState";
 import React, { useEffect, useState } from "react";
 
 export interface guessType {
@@ -12,14 +13,18 @@ export interface guessType {
   status: "correct" | "present" | "absent" | "";
 }
 function Page() {
+  const [loading, setLoading] = useState(false);
   const [showStartPopup, setShowStartPopup] = useState(true);
   const [correctWord, setCorrectWord] = useState("");
   const startGame = async () => {
+    setLoading(true);
+    setShowStartPopup(false);
     const response = await wordleClient.getWordle();
     if (response) {
       setCorrectWord(response.toUpperCase());
       console.log("Game started with:", response);
-      setShowStartPopup(false);
+
+      setLoading(false);
     }
   };
 
@@ -134,9 +139,10 @@ function Page() {
 
   return (
     <main className="flex flex-col mt-4 items-center justify-items-center min-h-screen">
+      {loading && <LoadingState />}
       {showStartPopup && <GameStart handleClick={handleStartNewGame} />}
       {gameWon && <GameWon handleClick={handleNewGame} stats={currentTry} />}
-      {gameLost && <GameLost handleClick={handleNewGame} stats={currentTry} />}
+      {gameLost && <GameLost handleClick={handleNewGame} word={correctWord} />}
       <Board guesses={guesses} guess={currGuess} currentTry={currentTry} />
       <Keyboard onKeyInput={handleKeyInput} pressedKeys={pressedKeys} />
     </main>
