@@ -2,7 +2,7 @@
 
 The fun Wordle game we all know too well!
 
-## ▶️ Play it Now
+## ▶️ Play it Now!
 
 - [🎮 Play My Wordle](https://wordle-steel-tau.vercel.app/)
 
