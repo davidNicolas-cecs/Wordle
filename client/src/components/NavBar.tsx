@@ -1,7 +1,14 @@
-import React from "react";
-import { Menu, User, BarChart, BadgeHelp } from "lucide-react";
+"use client";
+import React, { useEffect, useState } from "react";
+import { Menu, User, BarChart, BadgeHelp, LogOut } from "lucide-react";
+import { set } from "zod";
 
 function NavBar() {
+  const [user, setUser] = useState<any>(null);
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    setUser(user ? JSON.parse(user) : null);
+  }, []);
   return (
     <section className="flex justify-between items-center border-b  border-gray-700 py-3 px-4 h-16 w-full bg-gray-800">
       <div className="flex items-center">
@@ -26,6 +33,17 @@ function NavBar() {
         <a className="p-1" href="/user/register">
           <User className="w-6 h-6 text-gray-300" />
         </a>
+        {user && (
+          <button
+            className="p-1 cursor-pointer"
+            onClick={() => {
+              localStorage.removeItem("user");
+              setUser(null);
+            }}
+          >
+            <LogOut className="w-6 h-6 text-gray-300" />
+          </button>
+        )}
       </div>
     </section>
   );

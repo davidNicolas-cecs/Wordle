@@ -1,4 +1,5 @@
 "use client";
+import { userClient } from "@/api/UserClient";
 import { wordleClient } from "@/api/WordleClient";
 import Board from "@/components/Game/Board";
 import Keyboard from "@/components/Game/Keyboard";
@@ -7,12 +8,28 @@ import GameStart from "@/components/Popups/GameStart";
 import GameWon from "@/components/Popups/GameWon";
 import LoadingState from "@/components/Popups/LoadingState";
 import React, { useEffect, useState } from "react";
+import { set } from "zod";
 
 export interface guessType {
   letter: string;
   status: "correct" | "present" | "absent" | "";
 }
 function Page() {
+  const [user, setUser] = useState<any>(null);
+  // To update User state for history
+  const checkStorage = () => {
+    const user = localStorage.getItem("user");
+    if (!user) {
+      setUser(null);
+      return;
+    }
+
+    const userId = JSON.parse(user)?.id;
+    setUser(userId);
+  };
+  useEffect(() => {
+    checkStorage();
+  }, []);
   const [loading, setLoading] = useState(false);
   const [showStartPopup, setShowStartPopup] = useState(true);
   const [correctWord, setCorrectWord] = useState("");
@@ -27,7 +44,7 @@ function Page() {
       setLoading(false);
     }
   };
-
+  // Validate word api call
   const validateWord = async (word: string) => {
     try {
       const response = await wordleClient.validateWord(word);
@@ -37,6 +54,7 @@ function Page() {
       return false;
     }
   };
+  // Initialize game state var
   const [currGuess, setCurrGuess] = useState<string[]>([]);
   const [guesses, setGuesses] = useState<guessType[][]>(
     Array.from({ length: 6 }, () =>
@@ -51,6 +69,7 @@ function Page() {
     Record<string, "correct" | "present" | "absent">
   >({});
 
+  // Handles key press events
   const handleKeyInput = async (key: string) => {
     const keyStatusMap: Record<string, "correct" | "present" | "absent"> = {};
 
@@ -65,6 +84,7 @@ function Page() {
           return;
         }
         const newGuesses = [...guesses];
+        // Goes through the guess and sets the corresponding status - correct, present, absent
         for (let i = 0; i < 5; i++) {
           if (currGuess[i] === correctWord[i]) {
             newGuesses[currentTry][i] = {
@@ -87,6 +107,7 @@ function Page() {
           }
         }
         setGuesses(newGuesses);
+        // Updates the keys with the same status
         setPressedKeys((prev) => {
           const updated = { ...prev };
           Object.entries(keyStatusMap).forEach(([key, status]) => {
@@ -104,20 +125,31 @@ function Page() {
         setCurrGuess([]);
         setCurrentTry((prev) => prev + 1);
         // if word is correct
+        // Game logic if the word is correct or if the game is lost
         if (
           newGuesses[currentTry].map((g) => g.letter).join("") === correctWord
         ) {
           setGameWon(true);
+          checkStorage();
+          // call to increment users history total wins
+          if (user) {
+            await userClient.addToWinCount(user);
+          }
         } else if (currentTry === 5) {
           setGameLost(true);
+          checkStorage();
+          if (user) {
+            await userClient.addTotalCount(user);
+          }
           return;
         }
       }
+      // keeps track of current key press
     } else if (currGuess.length < 5) {
       setCurrGuess((prev) => [...prev, key]);
     }
   };
-
+  // Handles new Game logic on click
   const handleNewGame = () => {
     startGame();
     setCurrGuess([]);
@@ -131,12 +163,13 @@ function Page() {
     setGameWon(false);
     setGameLost(false);
     setCurrentTry(0);
+    checkStorage();
   };
-
+  //for first game popup
   const handleStartNewGame = () => {
     startGame();
   };
-
+  // Components -> board displays, keyboard handles key presses and dispplays, POPUPS for game ending logic and Loading state for api requests pending
   return (
     <main className="flex flex-col mt-4 items-center justify-items-center min-h-screen">
       {loading && <LoadingState />}
