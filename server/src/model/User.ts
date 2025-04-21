@@ -1,11 +1,15 @@
 import client from "../db";
 import { UserCreate } from "../types";
+import { History } from "../model/History";
+
 export class User {
   private static TABLE_NAME: string = "user";
 
   public static async addUser(user: Partial<UserCreate>) {
     const query = `INSERT INTO "user" (username, email) VALUES ($1, $2) RETURNING id`;
     const result = await client.query(query, [user.username, user.email]);
+    // Create history entry for user
+    await History.createHistoryEntry(result.rows[0].id);
     return result.rows[0]?.id;
   }
   public static async loginUser(user: Partial<UserCreate>) {

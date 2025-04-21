@@ -11,7 +11,6 @@ export const wordleClient = {
           "?random=true&limit=1&letters=5"
         );
         const word = res.data.word;
-        console.log(word);
         if (letterPattern.test(word)) {
           return word;
         }
