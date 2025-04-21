@@ -17,8 +17,7 @@ function KeyTile({ char, handleKeyPress, status }: KeyTileProps) {
       : "bg-gray-700";
   return (
     <button
-      disabled
-      className={`bg-gray-400  w-[40px] h-[60px] min-w-fit rounded-xs mt-2 p-2 ${bgColor}`}
+      className={`bg-gray-400  w-[40px] h-[60px] min-w-fit rounded-xs mt-2 p-2 ${bgColor} cursor-pointer `}
       onClick={() => handleKeyPress(char)}
     >
       <p className="text-white font-black">
