@@ -5,10 +5,17 @@ import { WordResponse } from "../types";
 export const wordleClient = {
   getRandomWord: async (): Promise<string> => {
     try {
-      const res = await apiClient.get<WordResponse>(
-        "?random=true&limit=1&letters=5"
-      );
-      return res.data.word;
+      const letterPattern = /^[a-z]{5}$/;
+      while (true) {
+        const res = await apiClient.get<WordResponse>(
+          "?random=true&limit=1&letters=5"
+        );
+        const word = res.data.word;
+        console.log(word);
+        if (letterPattern.test(word)) {
+          return word;
+        }
+      }
     } catch (err) {
       console.error("Error fetching random word:", err);
       throw err;
