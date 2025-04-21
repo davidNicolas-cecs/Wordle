@@ -1,5 +1,5 @@
 import React from "react";
-import { Menu, Settings, BarChart, BadgeHelp } from "lucide-react";
+import { Menu, User, BarChart, BadgeHelp } from "lucide-react";
 
 function NavBar() {
   return (
@@ -12,7 +12,7 @@ function NavBar() {
 
       <div className="flex-grow text-center">
         <h1 className="text-3xl font-bold tracking-wide ml-16  text-gray-200">
-          Wordle
+          <a href="/">Wordle</a>
         </h1>
       </div>
 
@@ -20,12 +20,12 @@ function NavBar() {
         <button className="p-1">
           <BadgeHelp className="w-6 h-6 text-gray-300" />
         </button>
-        <button className="p-1">
+        <a className="p-1" href="/user/stats">
           <BarChart className="w-6 h-6 text-gray-300" />
-        </button>
-        <button className="p-1">
-          <Settings className="w-6 h-6 text-gray-300" />
-        </button>
+        </a>
+        <a className="p-1" href="/user/register">
+          <User className="w-6 h-6 text-gray-300" />
+        </a>
       </div>
     </section>
   );
