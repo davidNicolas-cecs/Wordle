@@ -1,10 +1,15 @@
 import client from "../db";
 import { UserCreate } from "../types";
 export class User {
-  private static TABLE_NAME: string = "User";
+  private static TABLE_NAME: string = "user";
 
   public static async addUser(user: Partial<UserCreate>) {
-    const query = `INSERT INTO ${this.TABLE_NAME} (username, email) VALUES ($1, $2)`;
+    const query = `INSERT INTO "user" (username, email) VALUES ($1, $2) RETURNING id`;
+    const result = await client.query(query, [user.username, user.email]);
+    return result.rows[0]?.id;
+  }
+  public static async loginUser(user: Partial<UserCreate>) {
+    const query = `SELECT id FROM "user" WHERE username = $1 AND email = $2 `;
     const result = await client.query(query, [user.username, user.email]);
     return result.rows[0]?.id;
   }
