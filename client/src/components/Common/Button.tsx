@@ -10,7 +10,7 @@ function Button({ children, onClick }: ButtonProps): JSX.Element {
   return (
     <button
       onClick={onClick}
-      className=" border p-2 bg-green-900 cursor-pointer"
+      className=" border p-2 bg-green-900 cursor-pointer text-white"
     >
       {children}
     </button>

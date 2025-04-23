@@ -10,7 +10,7 @@ interface GameWonProps {
 function GameLost({ handleClick, word }: GameWonProps) {
   return (
     <Popup>
-      <div className="flex flex-col items-center justify-center h-full w-full gap-4">
+      <div className="flex flex-col items-center justify-center h-full w-full gap-4 text-white">
         <h1 className="font-bold text-2xl">Nice Try!</h1>
         <p>The word was: {word}</p>
 

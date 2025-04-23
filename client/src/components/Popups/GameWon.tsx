@@ -11,7 +11,7 @@ function GameWon({ handleClick, stats }: GameWonProps) {
   const [saved, setSaved] = useState(false);
   return (
     <Popup>
-      <div className="flex flex-col items-center justify-center h-full w-full gap-4 cursor-pointer">
+      <div className="flex flex-col items-center justify-center h-full w-full gap-4 cursor-pointer text-white">
         <h1 className="font-bold text-2xl">You Won</h1>
         <p>Guessed in : {stats} / 6</p>
         <p>Accuracy: {((1 - (stats - 1) / 6) * 100).toFixed(2)}%</p>

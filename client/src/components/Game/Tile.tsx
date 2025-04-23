@@ -18,7 +18,7 @@ function Tile({ letter, status }: TileProps) {
     <div
       className={`border-zinc-500 w-[60px] h-[60px] border-2 mt-2 flex items-center justify-center ${bgColor}`}
     >
-      <p className="font-medium text-2xl">{letter}</p>
+      <p className="font-medium text-2xl text-white">{letter}</p>
     </div>
   );
 }
